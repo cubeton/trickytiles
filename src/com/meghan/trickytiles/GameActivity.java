@@ -1,5 +1,6 @@
 package com.meghan.trickytiles;
 
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
@@ -9,18 +10,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.os.Build;
 
 public class GameActivity extends Activity {
+	
+	TableLayout mainTable;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_game);
-
-		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
+		setContentView(R.layout.game_layout);
+		
+		
+		mainTable = (TableLayout)findViewById(R.id.mainTable);
+		for(int i=0; i<5; i++) {
+			TableRow row = new TableRow(this);
+			TextView t = new TextView(this);
+			t.setText("rawr" + i);
+			row.addView(t);
+			mainTable.addView(row, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)); 
 		}
 	}
 
@@ -42,23 +53,6 @@ public class GameActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_game, container,
-					false);
-			return rootView;
-		}
 	}
 
 }
