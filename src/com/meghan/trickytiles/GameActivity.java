@@ -1,5 +1,8 @@
 package com.meghan.trickytiles;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import android.app.ActionBar.LayoutParams;
@@ -40,25 +43,46 @@ public class GameActivity extends Activity {
 	}
 	
 	private void initializeGame() {
-		int id = 0; //Tile number
-		int blankspace = randomInteger.nextInt(15);
+		int blankspace = randomInteger.nextInt(15); //Pick what tile gets the blank spot
+		
+		List<Integer> samples = new ArrayList<Integer>(); //setting up array to randomly pick id values from
+		for(int entries=0; entries<(numColumns*numRows); entries++) {
+			samples.add(entries);
+			System.out.println("entries number is" + String.valueOf(entries));			
+		}
+		Collections.shuffle(samples);
+		for(int number: samples) {
+			System.out.println(String.valueOf(number));
+		}
+		
+		System.out.println("********************************");
+		
+		int index = 0;
 		for(int i=0; i<numColumns; i++) {
 			TableRow row = new TableRow(this);
 			for(int j=0; j<numRows; j++) {
-					Tile newTile;
-				if(blankspace == id) {
-					newTile = new Tile(this.getBaseContext(), i, j, 16, true);
+				Tile newTile;
+				if(blankspace == samples.get(index)) {
+					newTile = new Tile(this.getBaseContext(), i, j, samples.get(index), true);
 					blankspace = -1; //resetting it so no other tile gets called a blank
 				} else { 
-					newTile = new Tile(this.getBaseContext(), i, j, id, false);
-					id++;
+					newTile = new Tile(this.getBaseContext(), i, j, samples.get(index), false);
+
 				}
+				index++;
 				tileArray[i][j] = newTile;
 				row.addView(newTile);
-
+/*				for(int entries=0; entries<(numColumns*numRows); entries++) {
+					System.out.println("entries number is" + String.valueOf(entries));			
+				}*/
 			}
+
 			mainTable.addView(row); 		
-		}		
+		}	
+		//Don't want to start with a winning game, reset game if it's correct
+		if(checkForWin()) {
+			initializeGame();
+		}
 	}
 
 	@Override
