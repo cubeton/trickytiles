@@ -1,4 +1,5 @@
 package com.meghan.trickytiles;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -22,7 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Build;
 
-public class GameActivity extends Activity {
+public class GameActivity extends Activity implements OnClickListener{
 	
 	TableLayout mainTable;
 	int numRows  = 4;
@@ -63,6 +65,7 @@ public class GameActivity extends Activity {
 				index++;
 				tileArray[i][j] = newTile;
 				newTile.setLayoutParams(itemParams);
+			    newTile.setOnClickListener(this);
 				row.addView(newTile);
 			}
 			row.setLayoutParams(rowParams);
@@ -113,6 +116,13 @@ public class GameActivity extends Activity {
 		Toast.makeText(getApplicationContext(), "Game winner!",
 				   Toast.LENGTH_SHORT).show();
 		return true; //We have a winner!
+	}
+
+	@Override
+	public void onClick(View v) {
+		Toast.makeText(getApplicationContext(), "rawr", 
+				   Toast.LENGTH_LONG).show();
+		
 	}
 }
 
