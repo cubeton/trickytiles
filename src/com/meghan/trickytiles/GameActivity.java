@@ -43,42 +43,33 @@ public class GameActivity extends Activity {
 	}
 	
 	private void initializeGame() {
+		
+		TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
+        TableRow.LayoutParams itemParams = new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);	
+		
 		int blankspace = randomInteger.nextInt(15); //Pick what tile gets the blank spot
 		
 		List<Integer> samples = new ArrayList<Integer>(); //setting up array to randomly pick id values from
 		for(int entries=0; entries<(numColumns*numRows); entries++) {
 			samples.add(entries);
-			System.out.println("entries number is" + String.valueOf(entries));			
 		}
 		Collections.shuffle(samples);
-		for(int number: samples) {
-			System.out.println(String.valueOf(number));
-		}
-		
-		System.out.println("********************************");
 		
 		int index = 0;
 		for(int i=0; i<numColumns; i++) {
 			TableRow row = new TableRow(this);
 			for(int j=0; j<numRows; j++) {
-				Tile newTile;
-				if(blankspace == samples.get(index)) {
-					newTile = new Tile(this.getBaseContext(), i, j, samples.get(index), true);
-					blankspace = -1; //resetting it so no other tile gets called a blank
-				} else { 
-					newTile = new Tile(this.getBaseContext(), i, j, samples.get(index), false);
-
-				}
+				Tile newTile = new Tile(this.getBaseContext(), i, j, samples.get(index), blankspace == samples.get(index));
 				index++;
 				tileArray[i][j] = newTile;
+				newTile.setLayoutParams(itemParams);
 				row.addView(newTile);
-/*				for(int entries=0; entries<(numColumns*numRows); entries++) {
-					System.out.println("entries number is" + String.valueOf(entries));			
-				}*/
 			}
-
+			row.setLayoutParams(rowParams);
+			
 			mainTable.addView(row); 		
 		}	
+		
 		//Don't want to start with a winning game, reset game if it's correct
 		if(checkForWin()) {
 			initializeGame();
