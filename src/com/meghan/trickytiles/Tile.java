@@ -1,17 +1,29 @@
 package com.meghan.trickytiles;
 
-public class Tile {
+import android.content.Context;
+import android.graphics.Color;
+import android.widget.Button;
+
+public class Tile extends Button{
 	public int xLocation;
 	public int yLocation;
 	public int numberId;
 	public boolean isBlank;
 	
-	public Tile(int x, int y, int id, boolean isBlank) {
+	public Tile(Context context, int x, int y, int id, boolean isBlank) {
+		super(context);
 		this.xLocation = x;
 		this.yLocation = y;
 		this.numberId = id;
 		this.isBlank = isBlank;
+		if(isBlank) {
+			setText("Blank space");
+		} else {
+			setText(String.valueOf(numberId));			
+		}
+
 	}
+	
 	public int getXLocation() {
 		return xLocation;
 	}
@@ -30,5 +42,9 @@ public class Tile {
 	
 	public boolean isBlank() {
 		return isBlank;
+	}
+	
+	public int getNumberId() {
+		return numberId;
 	}
 }
