@@ -29,6 +29,9 @@ public class GameActivity extends Activity implements OnClickListener{
 	TableLayout mainTable;
 	int numRows  = 4;
 	int numColumns = 4;
+	int blankXLocation;
+	int blankYLocation;
+	
 	Tile[][] tileArray = new Tile[numRows][numColumns];
 	Random randomInteger = new Random();
 	
@@ -62,6 +65,10 @@ public class GameActivity extends Activity implements OnClickListener{
 			TableRow row = new TableRow(this);
 			for(int j=0; j<numRows; j++) {
 				Tile newTile = new Tile(this.getBaseContext(), i, j, samples.get(index), blankspace == samples.get(index));
+				if(blankspace == samples.get(index)) {
+					blankXLocation = i;
+					blankYLocation = j;
+				}
 				index++;
 				tileArray[i][j] = newTile;
 				newTile.setLayoutParams(itemParams);
@@ -120,8 +127,41 @@ public class GameActivity extends Activity implements OnClickListener{
 
 	@Override
 	public void onClick(View v) {
-		Toast.makeText(getApplicationContext(), "rawr", 
-				   Toast.LENGTH_LONG).show();
+		Tile tilePressed = (Tile) v;
+		
+		int pressedXLocation = tilePressed.getXLocation();
+		int pressedYLocation = tilePressed.getYLocation();
+		
+		boolean blankIsAbove = (pressedYLocation + 1 == blankYLocation) && (pressedXLocation == blankXLocation);
+		boolean blankIsToTheRight = (pressedYLocation == blankYLocation) && (pressedXLocation + 1 == blankXLocation);
+		boolean blankIsToTheLeft = (pressedYLocation == blankYLocation) && (pressedXLocation - 1 == blankXLocation);
+		boolean blankIsBelow = (pressedYLocation -1 == blankYLocation) && (pressedXLocation == blankXLocation);
+		
+		if (blankIsAbove || blankIsToTheRight ||  blankIsToTheLeft || blankIsBelow) {
+			Toast.makeText(getApplicationContext(), "Next to blank tile!",
+					   Toast.LENGTH_LONG).show();
+			swapTile(tilePressed);
+						
+		}
+	}
+	
+	private void swapTile(Tile tilePressed) {
+		
+		int newBlankXLocation = tilePressed.getXLocation();
+		int newBlankYLocation = tilePressed.getYLocation();
+		
+		tileArray[blankXLocation][blankYLocation].setText(tilePressed.getText());
+		tileArray[blankXLocation][blankYLocation].setIsBlank(false);
+		tileArray[blankXLocation][blankYLocation].setNumberId(tilePressed.getNumberId());		
+		
+		tileArray[newBlankXLocation][newBlankYLocation].setIsBlank(true);	
+		
+		blankXLocation = newBlankXLocation;
+		blankYLocation = newBlankYLocation;
+		
+
+		
+		
 		
 	}
 }

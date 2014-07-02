@@ -17,12 +17,12 @@ public class Tile extends Button{
 		this.numberId = id;
 		this.isBlank = isBlank;
 		if(isBlank) {
-			setText("Blank space");
+			setText("B");
 		} else {
 			setText(String.valueOf(numberId));			
 		}
-
 	}
+	
 	
 	public int getXLocation() {
 		return xLocation;
@@ -32,6 +32,8 @@ public class Tile extends Button{
 		this.xLocation = newXLocation;
 	}
 
+	
+	
 	public int getYLocation() {
 		return yLocation;
 	}
@@ -40,8 +42,32 @@ public class Tile extends Button{
 		this.yLocation = newYLocation;
 	}	
 	
+	
+	
+	public void setIsBlank(boolean isBlank) {
+		this.isBlank = isBlank;
+		if(isBlank) {
+			this.setNumberId(16); //Fix to not be hard coded, instead use row*height
+		}
+	}
+	
 	public boolean isBlank() {
 		return isBlank;
+	}
+		
+	
+	
+	
+	public void setNumberId(int id) {
+		this.numberId = id;
+		if(this.isBlank) {
+			this.setText("B");
+		}
+		else {
+			this.setText(String.valueOf(this.numberId));
+		}
+		
+
 	}
 	
 	public int getNumberId() {
