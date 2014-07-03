@@ -30,13 +30,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Build;
 
-public class GameActivity extends Activity implements OnClickListener{
+public class GameActivity extends Activity implements OnClickListener, OnTouchListener{
 	
 	TableLayout mainTable;
 	int numRows  = 4;
 	int numColumns = 4;
 	int blankXLocation;
 	int blankYLocation;
+	float downXValue;
+	float downYValue;
+	
 	Animation animationTranslateLeft;
 	Animation animationTranslateRight;
 	Animation animationTranslateUp;
@@ -89,6 +92,7 @@ public class GameActivity extends Activity implements OnClickListener{
 				tileArray[i][j] = newTile;
 				newTile.setLayoutParams(itemParams);
 			    newTile.setOnClickListener(this);
+			    newTile.setOnTouchListener(this);
 				row.addView(newTile);
 			}
 			row.setLayoutParams(rowParams);
@@ -193,63 +197,91 @@ public class GameActivity extends Activity implements OnClickListener{
 		
 	}
 	
-   
-   
-/*	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		Tile tilePressed = (Tile) v;
-		int action = MotionEventCompat.getActionMasked(event);
-		switch(action) 
-		{
-		 case (MotionEvent.ACTION_MOVE):
-	         int x = (int)event.getX() - (int)tilePressed.getX();
-	         int y = (int)event.getY() - (int)tilePressed.getY();	
-	         
-				Toast.makeText(getApplicationContext(), "X change: " + String.valueOf(x) + "Y change: " + y,
-						   Toast.LENGTH_SHORT).show();
-		
-		}
-	         int w = getWindowManager().getDefaultDisplay().getWidth() - 100;
-	         int h = getWindowManager().getDefaultDisplay().getHeight() - 100;
-	         
-	         if(x > w) {
-	        	 x = w;
-	         }        	 
+   @Override
+   public boolean onTouchEvent(MotionEvent event) {
+	   switch(event.getAction()) {
+	   case MotionEvent.ACTION_DOWN: {
+		   float downXValue = event.getX();
+		   float downYValue = event.getY();
+		   break;
+	   }
+       case MotionEvent.ACTION_UP: {
+           float currentX = event.getX();
+           float currentY = event.getY();
+           // check if horizontal or vertical movement was bigger
 
-	         if(y > h) {
-	        	 y = h;
-	         }
+           if (Math.abs(downXValue - currentX) > Math.abs(downYValue
+                   - currentY)) {
+               // going backwards: pushing stuff to the right
+               if (downXValue < currentX) {
+   				Toast.makeText(getApplicationContext(), "Moving RIGHT",
+						   Toast.LENGTH_SHORT).show();	
+               }
 
-return false;
-	}*/
+               // going forwards: pushing stuff to the left
+               if (downXValue > currentX) {
+      				Toast.makeText(getApplicationContext(), "Moving LEFT",
+ 						   Toast.LENGTH_SHORT).show();	
+      			}
+           } else {
+               if (downYValue < currentY) {
+      				Toast.makeText(getApplicationContext(), "Moving DOWN",
+ 						   Toast.LENGTH_SHORT).show();	
+               }
+               if (downYValue > currentY) {
+      				Toast.makeText(getApplicationContext(), "Moving UP",
+ 						   Toast.LENGTH_SHORT).show();	
+               }
+           }
+           break;
+       }
+	  }
+	   
+	   return true;
+   }
 
+@Override
+public boolean onTouch(View v, MotionEvent event) {
+	   switch(event.getAction()) {
+	   case MotionEvent.ACTION_DOWN: {
+		   float downXValue = event.getX();
+		   float downYValue = event.getY();
+		   break;
+	   }
+    case MotionEvent.ACTION_UP: {
+        float currentX = event.getX();
+        float currentY = event.getY();
+        // check if horizontal or vertical movement was bigger
 
+        if (Math.abs(downXValue - currentX) > Math.abs(downYValue
+                - currentY)) {
+            // going backwards: pushing stuff to the right
+            if (downXValue < currentX) {
+				Toast.makeText(getApplicationContext(), "Moving RIGHT",
+						   Toast.LENGTH_SHORT).show();	
+            }
 
-/*		switch(action) {
-		case(MotionEvent.ACTION_DOWN): 
-			swipeDown(tilePressed);
-			Toast.makeText(getApplicationContext(), "SWIPE DOWN Tile #:" + String.valueOf(tilePressed.getNumberId()),
-					   Toast.LENGTH_LONG).show();						
-		break;
-		case(MotionEvent.ACTION_UP): 
-			swipeUp(tilePressed);
-			Toast.makeText(getApplicationContext(), "SWIPE UP Tile #:" + String.valueOf(tilePressed.getNumberId()),
-					   Toast.LENGTH_LONG).show();						
-		break;
-		}
-		case(MotionEvent.ACTION_LEFT): 
-			swipeUp(tilePressed);
-			Toast.makeText(getApplicationContext(), "SWIPE UP Tile #:" + String.valueOf(tilePressed.getNumberId()),
-				   Toast.LENGTH_LONG).show();						
-			break;
-		}
-	case(MotionEvent.ACTION_UP): 
-		swipeUp(tilePressed);
-		Toast.makeText(getApplicationContext(), "SWIPE UP Tile #:" + String.valueOf(tilePressed.getNumberId()),
-			   Toast.LENGTH_LONG).show();						
-		break;
-	}
-		return false;
-	}*/
+            // going forwards: pushing stuff to the left
+            if (downXValue > currentX) {
+   				Toast.makeText(getApplicationContext(), "Moving LEFT",
+						   Toast.LENGTH_SHORT).show();	
+   			}
+        } else {
+            if (downYValue < currentY) {
+   				Toast.makeText(getApplicationContext(), "Moving DOWN",
+						   Toast.LENGTH_SHORT).show();	
+            }
+            if (downYValue > currentY) {
+   				Toast.makeText(getApplicationContext(), "Moving UP",
+						   Toast.LENGTH_SHORT).show();	
+            }
+        }
+        break;
+    }
+}
+	   
+	   return true;
+}
 }
 
+         
