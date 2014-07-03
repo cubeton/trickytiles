@@ -11,13 +11,19 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnDragListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -31,6 +37,10 @@ public class GameActivity extends Activity implements OnClickListener{
 	int numColumns = 4;
 	int blankXLocation;
 	int blankYLocation;
+	Animation animationTranslateLeft;
+	Animation animationTranslateRight;
+	Animation animationTranslateUp;
+	Animation animationTranslateDown;
 	
 	Tile[][] tileArray = new Tile[numRows][numColumns];
 	Random randomInteger = new Random();
@@ -39,6 +49,12 @@ public class GameActivity extends Activity implements OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game_layout);
+		
+		animationTranslateLeft = AnimationUtils.loadAnimation(this, R.anim.anim_translate_left);
+		animationTranslateRight = AnimationUtils.loadAnimation(this, R.anim.anim_translate_right);
+		animationTranslateUp = AnimationUtils.loadAnimation(this, R.anim.anim_translate_up);
+		animationTranslateDown = AnimationUtils.loadAnimation(this, R.anim.anim_translate_down);
+		
 		
 		//Add tiles to the board
 		mainTable = (TableLayout)findViewById(R.id.mainTable);
@@ -106,10 +122,6 @@ public class GameActivity extends Activity implements OnClickListener{
 	}
 
 	
-	private void switchTiles() {
-		
-	}
-	
 	private boolean checkForWin() {
 		int numberId = 0;
 		for(int i=0; i<numColumns; i++) {
@@ -128,8 +140,12 @@ public class GameActivity extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		Tile tilePressed = (Tile) v;
+
 		
-		int pressedXLocation = tilePressed.getXLocation();
+		
+		
+		/*		tilePressed.startAnimation(animationTranslateRight);*/
+/*		int pressedXLocation = tilePressed.getXLocation();
 		int pressedYLocation = tilePressed.getYLocation();
 		
 		boolean blankIsAbove = (pressedYLocation + 1 == blankYLocation) && (pressedXLocation == blankXLocation);
@@ -142,9 +158,25 @@ public class GameActivity extends Activity implements OnClickListener{
 					   Toast.LENGTH_LONG).show();
 			swapTile(tilePressed);
 						
-		}
+		}*/
 	}
 	
+	private void swipeDown(Tile tilePressed) {
+		
+	}
+	
+	private void swipeLeft(Tile tilePressed) {
+		
+	}
+	
+	private void swipeRight(Tile tilePressed) {
+		
+	}
+	
+	private void swipeUp(Tile tilePressed) {
+		
+	}	
+
 	private void swapTile(Tile tilePressed) {
 		
 		int newBlankXLocation = tilePressed.getXLocation();
@@ -159,10 +191,65 @@ public class GameActivity extends Activity implements OnClickListener{
 		blankXLocation = newBlankXLocation;
 		blankYLocation = newBlankYLocation;
 		
-
-		
-		
-		
 	}
+	
+   
+   
+/*	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		Tile tilePressed = (Tile) v;
+		int action = MotionEventCompat.getActionMasked(event);
+		switch(action) 
+		{
+		 case (MotionEvent.ACTION_MOVE):
+	         int x = (int)event.getX() - (int)tilePressed.getX();
+	         int y = (int)event.getY() - (int)tilePressed.getY();	
+	         
+				Toast.makeText(getApplicationContext(), "X change: " + String.valueOf(x) + "Y change: " + y,
+						   Toast.LENGTH_SHORT).show();
+		
+		}
+	         int w = getWindowManager().getDefaultDisplay().getWidth() - 100;
+	         int h = getWindowManager().getDefaultDisplay().getHeight() - 100;
+	         
+	         if(x > w) {
+	        	 x = w;
+	         }        	 
+
+	         if(y > h) {
+	        	 y = h;
+	         }
+
+return false;
+	}*/
+
+
+
+/*		switch(action) {
+		case(MotionEvent.ACTION_DOWN): 
+			swipeDown(tilePressed);
+			Toast.makeText(getApplicationContext(), "SWIPE DOWN Tile #:" + String.valueOf(tilePressed.getNumberId()),
+					   Toast.LENGTH_LONG).show();						
+		break;
+		case(MotionEvent.ACTION_UP): 
+			swipeUp(tilePressed);
+			Toast.makeText(getApplicationContext(), "SWIPE UP Tile #:" + String.valueOf(tilePressed.getNumberId()),
+					   Toast.LENGTH_LONG).show();						
+		break;
+		}
+		case(MotionEvent.ACTION_LEFT): 
+			swipeUp(tilePressed);
+			Toast.makeText(getApplicationContext(), "SWIPE UP Tile #:" + String.valueOf(tilePressed.getNumberId()),
+				   Toast.LENGTH_LONG).show();						
+			break;
+		}
+	case(MotionEvent.ACTION_UP): 
+		swipeUp(tilePressed);
+		Toast.makeText(getApplicationContext(), "SWIPE UP Tile #:" + String.valueOf(tilePressed.getNumberId()),
+			   Toast.LENGTH_LONG).show();						
+		break;
+	}
+		return false;
+	}*/
 }
 

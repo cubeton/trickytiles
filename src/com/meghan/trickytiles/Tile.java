@@ -33,7 +33,6 @@ public class Tile extends Button{
 	}
 
 	
-	
 	public int getYLocation() {
 		return yLocation;
 	}
