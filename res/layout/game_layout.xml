@@ -3,12 +3,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="right"
-    android:orientation="horizontal" >
+    android:orientation="horizontal" 
+    android:background="@color/background_color">
 
     <TableLayout
         android:id="@+id/mainTable"
-        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
         android:layout_centerInParent="true"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="40dp"
@@ -23,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginBottom="5dp"
         android:gravity="right"
         android:orientation="horizontal" >

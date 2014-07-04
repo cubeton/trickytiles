@@ -1,15 +1,17 @@
 package com.meghan.trickytiles;
-
+import android.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
+import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -34,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.os.Build;
 
+@SuppressLint("NewApi")
 public class GameActivity extends Activity implements OnTouchListener{
 
 	TableLayout mainTable;
@@ -88,28 +91,59 @@ public class GameActivity extends Activity implements OnTouchListener{
 		TableRow.LayoutParams itemParams = new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);	
 		itemParams.setMargins(3, 3, 3, 3);
 
-		int blankspace = randomInteger.nextInt(14); //Pick what tile gets the blank spot
-
+		int blankspace = randomInteger.nextInt(numColumns*numRows); //Pick what tile gets the blank spot
+/*		Toast.makeText(getApplicationContext(), "Blank is on tile: " + String.valueOf(blankspace),
+				   Toast.LENGTH_SHORT).show();*/
 		List<Integer> samples = new ArrayList<Integer>(); //setting up array to randomly pick id values from
 		for(int entries=0; entries<(numColumns*numRows); entries++) {
 			samples.add(entries);
 		}
 		Collections.shuffle(samples);
-
+		System.out.println(samples);
+		System.out.println("Blank is on tile: " + String.valueOf(blankspace));
 		int index = 0;
 		for(int i=0; i<numColumns; i++) {
 			TableRow row = new TableRow(this);
 			for(int j=0; j<numRows; j++) {
 				Tile newTile;
-				if(blankXLocation == -1 & (blankspace == samples.get(index))) {
-					newTile = new Tile(this.getBaseContext(), i, j, 15, blankspace == samples.get(index));
-						blankXLocation = i;
-						blankYLocation = j;				
+/*				System.out.println("Adding index" + String.valueOf(index));*/
+				if(samples.get(index) == ((numColumns*numRows)-1)) {
+					newTile = new Tile(this.getBaseContext(), i, j, samples.get(index), true);
+					blankXLocation = i;
+					blankYLocation = j;				
 				} else {
 					newTile = new Tile(this.getBaseContext(), i, j, samples.get(index), false);
-					index++;
 				}
 
+				//Setting tile colors
+				//TODO: Fix to not hard code values
+/*				System.out.println("Samples" + String.valueOf(samples));
+				System.out.println("Index to look up..." + String.valueOf((index)));
+				System.out.println("Right before coloring..." + String.valueOf(samples.get(index)));*/
+/*				if (index < 7) {
+					newTile.setBackground(getResources().getDrawable(R.drawable.tile_style_blue));	
+					System.out.println("Coloring blue index" + String.valueOf(samples.get(index)));
+				}*/
+				if (samples.get(index) >= 0 && samples.get(index) <= 4) {
+					newTile.setBackground(getResources().getDrawable(R.drawable.tile_style_blue));	
+					System.out.println("Coloring blue index" + String.valueOf(samples.get(index)));
+				}
+				else if (samples.get(index) > 4 && samples.get(index) <= 8) {
+					newTile.setBackground(getResources().getDrawable(R.drawable.tile_style_purple));			
+					System.out.println("Coloring purple index" + String.valueOf(samples.get(index)));
+				} else if (samples.get(index) > 8 && samples.get(index) <= 12) {
+					newTile.setBackground(getResources().getDrawable(R.drawable.tile_style_green));			
+					System.out.println("Coloring green index" + String.valueOf(samples.get(index)));
+				} else if (samples.get(index) > 12 && samples.get(index) <= 14) {
+					newTile.setBackground(getResources().getDrawable(R.drawable.tile_style_orange));			
+					System.out.println("Coloring orange index" + String.valueOf(samples.get(index)));
+				} else if (samples.get(index) == 15) {
+					newTile.setBackground(getResources().getDrawable(R.drawable.tile_style_blank));			
+					System.out.println("Coloring blank index" + String.valueOf(samples.get(index)));					
+				}
+				
+
+				index++;
 				tileArray[i][j] = newTile;
 				newTile.setLayoutParams(itemParams);
 
@@ -124,32 +158,47 @@ public class GameActivity extends Activity implements OnTouchListener{
 			mainTable.addView(row); 		
 		}	
 
-		//Don't want to start with a winning game, reset game if it's correct
-		if(checkForWin()) {
-			initializeGame();
-		}
 	}
 
-	private boolean checkForWin() {
+	private void checkForWin() {
 		int numberId = 0;
 		for(int i=0; i<numColumns; i++) {
 			for(int j=0; j<numRows; j++) {
 				if(numberId != tileArray[i][j].getNumberId()) {
-					return false; //not a game win
+					return; //not a game win
 				}
 				numberId++;
 			}
 		}
-		Toast.makeText(getApplicationContext(), "Game winner!",
-				Toast.LENGTH_SHORT).show();
-		return true; //We have a winner!
-	}
-
-	public boolean onTouchEvent(MotionEvent event, View v) {
-		Toast.makeText(getApplicationContext(), "RAWR",
-				Toast.LENGTH_SHORT).show();			   
-		return true;
-	}
+		//Is a win!
+		time_text.stop();
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				this);
+ 
+			// set title
+			alertDialogBuilder.setTitle("YOU WON!");
+ 
+			// set dialog message
+			alertDialogBuilder
+				.setMessage("Play again?")
+				.setCancelable(false)
+				.setPositiveButton("Yes yes yes RIGHT NOW!",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						resetGame();
+					}
+				  })
+				.setNegativeButton("no I don't like fun",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+ 
+				// create alert dialog
+				AlertDialog alertDialog = alertDialogBuilder.create();
+ 
+				// show it
+				alertDialog.show();
+			}	
 
 	private void swapTile(Tile tilePressed) {
 		move_count +=1;
