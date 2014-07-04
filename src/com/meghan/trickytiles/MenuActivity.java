@@ -26,7 +26,7 @@ public class MenuActivity extends Activity {
 				String strText = textView.getText().toString();
 				if (strText.equalsIgnoreCase(getResources().getString(R.string.menu_item_play))) {
 					//Start game
-					Intent gameIntent = new Intent(MenuActivity.this, MainActivity.class);
+					Intent gameIntent = new Intent(MenuActivity.this, GameActivity.class);
 					startActivityForResult(gameIntent, 1);
 				} else if (strText.equalsIgnoreCase(getResources().getString(R.string.menu_item_help))){
 					//Show help menu

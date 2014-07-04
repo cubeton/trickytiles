@@ -221,13 +221,10 @@ public class GameActivity extends Activity implements OnTouchListener{
 	private void swapTile(Tile tilePressed) {
 		move_count +=1;
 		move_text.setText(String.valueOf(move_count));
-/*		int index = mainTable.indexOfChild(tilePressed);
-		mainTable.bringChildToFront(mainTable.getChildAt(index));*/
 
 		int newBlankXLocation = tilePressed.getXLocation();
 		int newBlankYLocation = tilePressed.getYLocation();
 
-		//tileArray[blankXLocation][blankYLocation].setText(tilePressed.getText());
 		tileArray[blankXLocation][blankYLocation].setIsBlank(false);
 		tileArray[blankXLocation][blankYLocation].setNumberId(tilePressed.getNumberId());		
 
@@ -324,8 +321,8 @@ public class GameActivity extends Activity implements OnTouchListener{
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 		case (R.id.action_help) :
-/*			Intent myIntent = new Intent(this, HelpActivity.class);*/
-/*			startActivityForResult(myIntent, 1);*/
+			Intent myIntent = new Intent(this, HelpActivity.class);
+			startActivityForResult(myIntent, 1);
 			break;
 		case (R.id.action_refresh) :
 			Toast.makeText(getApplicationContext(), "Game reset",
