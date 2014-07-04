@@ -46,7 +46,7 @@ public class Tile extends Button{
 	public void setIsBlank(boolean isBlank) {
 		this.isBlank = isBlank;
 		if(isBlank) {
-			this.setNumberId(16); //Fix to not be hard coded, instead use row*height
+			this.setNumberId(16); //TODO: Fix to not be hard coded, instead use row*height
 		}
 	}
 	
