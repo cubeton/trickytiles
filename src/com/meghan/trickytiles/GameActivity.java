@@ -6,15 +6,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,7 +42,7 @@ public class GameActivity extends Activity implements OnTouchListener{
 	int blankYLocation;
 	float downXValue;
 	float downYValue;
-
+	public MenuItem play, pause;
 	Animation animationTranslateLeft;
 	Animation animationTranslateRight;
 	Animation animationTranslateUp;
@@ -52,7 +55,8 @@ public class GameActivity extends Activity implements OnTouchListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game_layout);
-
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 		animationTranslateLeft = AnimationUtils.loadAnimation(this, R.anim.anim_translate_left);
 		animationTranslateRight = AnimationUtils.loadAnimation(this, R.anim.anim_translate_right);
 		animationTranslateUp = AnimationUtils.loadAnimation(this, R.anim.anim_translate_up);
@@ -109,7 +113,7 @@ public class GameActivity extends Activity implements OnTouchListener{
 		}
 	}
 
-	@Override
+/*	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.game, menu);
@@ -126,7 +130,7 @@ public class GameActivity extends Activity implements OnTouchListener{
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
+	}*/
 
 
 	private boolean checkForWin() {
@@ -173,10 +177,7 @@ public class GameActivity extends Activity implements OnTouchListener{
 		if(tilePressed.isBlank()) {
 			return true;
 		}
-/*		Toast.makeText(getApplicationContext(), String.valueOf(tilePressed.isBlank()),
-				Toast.LENGTH_SHORT).show();			*/
 
-		
 		switch(event.getAction()) {
 		case MotionEvent.ACTION_DOWN: {
 			float downXValue = event.getX();
@@ -202,24 +203,14 @@ public class GameActivity extends Activity implements OnTouchListener{
 					- currentY)) {
 				// going backwards: pushing stuff to the right
 				if (downXValue < currentX) {
-/*					Toast.makeText(getApplicationContext(), String.valueOf(blankIsToTheRight),
-					Toast.LENGTH_SHORT).show();	*/		
-/*					Toast.makeText(getApplicationContext(), "Moving RIGHT",
-							Toast.LENGTH_SHORT).show();	*/
-
 					tilePressed.startAnimation(animationTranslateRight);
 					if(blankIsToTheRight) 
-					{
-/*						Toast.makeText(getApplicationContext(), "next to blank",
-								Toast.LENGTH_SHORT).show();		*/					
+					{					
 						swapTile (tilePressed);
 					}
 				}
-
 				// going forwards: pushing stuff to the left
 				if (downXValue > currentX) {
-/*					Toast.makeText(getApplicationContext(), "Moving LEFT",
-							Toast.LENGTH_SHORT).show();	*/
 					tilePressed.startAnimation(animationTranslateLeft);   	
 					if(blankIsToTheLeft) 
 					{
@@ -228,8 +219,6 @@ public class GameActivity extends Activity implements OnTouchListener{
 				}
 			} else {
 				if (downYValue < currentY) {
-/*					Toast.makeText(getApplicationContext(), "Moving DOWN",
-							Toast.LENGTH_SHORT).show();	*/
 					tilePressed.startAnimation(animationTranslateDown);
 					if(blankIsBelow) 
 					{
@@ -237,8 +226,6 @@ public class GameActivity extends Activity implements OnTouchListener{
 					}
 				}
 				if (downYValue > currentY) {
-/*					Toast.makeText(getApplicationContext(), "Moving UP",
-							Toast.LENGTH_SHORT).show();	*/
 					tilePressed.startAnimation(animationTranslateUp);
 					if(blankIsAbove) 
 					{
@@ -252,6 +239,50 @@ public class GameActivity extends Activity implements OnTouchListener{
 
 		return true;
 	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();/*					Toast.makeText(getApplicationContext(), String.valueOf(blankIsToTheRight),
+		Toast.LENGTH_SHORT).show();	*/		
+/*					Toast.makeText(getApplicationContext(), "Moving RIGHT",
+				Toast.LENGTH_SHORT).show();	*/
+		inflater.inflate(R.menu.main_menu, menu);
+		play = menu.findItem(R.id.action_play);
+		pause = menu.findItem(R.id.action_pause);
+		play.setVisible(false);
+		return true;
+	}
+	
+	@Override 
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+		case (R.id.action_help) :
+/*			Intent myIntent = new Intent(this, HelpActivity.class);*/
+/*			startActivityForResult(myIntent, 1);*/
+			break;
+		case (R.id.action_refresh) :
+			Toast.makeText(getApplicationContext(), "Game reset",
+					   Toast.LENGTH_SHORT).show();
+			/*resetGame();*/
+			break;
+		case(R.id.action_pause) :
+/*			toggleGameplay(false); //Pausing game
+*/			break;
+		case(R.id.action_play) :
+/*			toggleGameplay(true); //Playing game
+*/			break;
+		case (android.R.id.home) :
+			Intent returnIntent = new Intent();
+			setResult(RESULT_OK, returnIntent);
+			finish();
+			break;
+		}
+		return true;
+	}
+	
+	
+	
+
 
 }
 

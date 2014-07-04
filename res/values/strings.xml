@@ -3,5 +3,7 @@
 
     <string name="app_name">Tricky Tiles</string>
     <string name="action_settings">Settings</string>
-
+    <string name="move_text">Moves #: </string>
+	<string name="move_number">0</string>
+	<string name="time">Time passed: </string>
 </resources>

@@ -1,0 +1,27 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+	<item
+	    android:id="@+id/action_pause"
+	    android:orderInCategory="99"
+	    android:showAsAction="ifRoom"
+	    android:icon="@drawable/ic_action_pause"
+	    android:title="Pause"/>
+    <item
+        android:id="@+id/action_play"
+        android:orderInCategory="99"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_play"
+        android:title="Play"/>
+    <item
+        android:id="@+id/action_refresh"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_action_refresh"
+        android:title="Refresh"/>
+    <item
+        android:id="@+id/action_help"
+        android:orderInCategory="101"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_help"
+        android:title="Help"/>
+</menu> 

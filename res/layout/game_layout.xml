@@ -1,9 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id = "@+id/mainTable" 
-	android:stretchColumns="*"
-	android:layout_height="fill_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_centerInParent="true"
->
-</TableLayout > 
+    android:layout_height="fill_parent"
+    android:gravity="right"
+    android:orientation="horizontal" >
+
+    <TableLayout
+        android:id="@+id/mainTable"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerInParent="true"
+        android:stretchColumns="*" >
+    </TableLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:orientation="horizontal" >
+
+        <!-- android:textColor="@color/play_color" -->
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:gravity="right"
+        android:orientation="horizontal" >
+
+        <!-- android:textColor="@color/play_color" -->
+
+        <TextView
+            android:id="@+id/click_text_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:text="@string/move_text"
+            android:textSize="18sp" />
+
+        <Chronometer
+            android:id="@+id/time_id_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:text="Chronometer"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/click_text_number_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/click_text_id"
+            android:text="@string/move_number"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/time_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="31dp"
+            android:layout_toLeftOf="@+id/time_id_number"
+            android:text="@string/time"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
