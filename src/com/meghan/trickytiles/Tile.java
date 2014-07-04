@@ -44,9 +44,11 @@ public class Tile extends Button{
 	
 	
 	public void setIsBlank(boolean isBlank) {
+		System.out.println("Setting tileId " + String.valueOf(numberId) + " to " + String.valueOf(isBlank));
 		this.isBlank = isBlank;
-		if(isBlank) {
-			this.setNumberId(16); //TODO: Fix to not be hard coded, instead use row*height
+		if(this.isBlank) {
+			this.setText("");
+			this.setNumberId(15); //TODO: Fix to not be hard coded, instead use row*height
 		}
 	}
 	
@@ -56,7 +58,9 @@ public class Tile extends Button{
 	
 	public void setNumberId(int id) {
 		this.numberId = id;
+		System.out.println("setNumberId of tileId " + String.valueOf(numberId) + " to " + String.valueOf(isBlank));
 		if(!this.isBlank) {
+			System.out.println("setting text for tileId " + String.valueOf(numberId));
 			this.setText(String.valueOf(this.numberId));
 		}
 	}

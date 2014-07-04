@@ -6,4 +6,8 @@
     <string name="move_text">Moves #: </string>
 	<string name="move_number">0</string>
 	<string name="time">Time passed: </string>
+	<string name="intro">Gameplay Instructions</string>
+	<string name="menu_item_play">Play Game</string>
+	<string name="menu_item_help">Instructions</string>
+	<string name="intructions">Time to put the tiles in their place! Rearrange the tiles in numeric order to WIN!</string>
 </resources>

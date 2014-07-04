@@ -1,4 +1,5 @@
 package com.meghan.trickytiles;
+
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -6,7 +7,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
@@ -31,6 +31,7 @@ import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.Chronometer;
 import android.widget.TableLayout;
@@ -59,6 +60,7 @@ public class GameActivity extends Activity implements OnTouchListener{
 	public TextView move_text;
 	public Chronometer time_text; 
 	public int move_count = 0;
+	Tile animatedPressedTile = null;
 	
 	
 	Tile[][] tileArray = new Tile[numRows][numColumns];
@@ -75,13 +77,41 @@ public class GameActivity extends Activity implements OnTouchListener{
 		
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		
-		
+				
 		animationTranslateLeft = AnimationUtils.loadAnimation(this, R.anim.anim_translate_left);
 		animationTranslateRight = AnimationUtils.loadAnimation(this, R.anim.anim_translate_right);
 		animationTranslateUp = AnimationUtils.loadAnimation(this, R.anim.anim_translate_up);
 		animationTranslateDown = AnimationUtils.loadAnimation(this, R.anim.anim_translate_down);
-
+		animationTranslateRight.setAnimationListener(new AnimationListener(){
+		    public void onAnimationStart(Animation a){}
+		    public void onAnimationRepeat(Animation a){}
+		    public void onAnimationEnd(Animation a){
+				swapTile(animatedPressedTile);
+		    }
+		});
+		animationTranslateLeft.setAnimationListener(new AnimationListener(){
+		    public void onAnimationStart(Animation a){}
+		    public void onAnimationRepeat(Animation a){}
+		    public void onAnimationEnd(Animation a){
+				swapTile(animatedPressedTile);
+		    }
+		});		
+		animationTranslateUp.setAnimationListener(new AnimationListener(){
+		    public void onAnimationStart(Animation a){}
+		    public void onAnimationRepeat(Animation a){}
+		    public void onAnimationEnd(Animation a){
+				swapTile(animatedPressedTile);
+		    }
+		});		
+		animationTranslateDown.setAnimationListener(new AnimationListener(){
+		    public void onAnimationStart(Animation a){}
+		    public void onAnimationRepeat(Animation a){}
+		    public void onAnimationEnd(Animation a){
+				swapTile(animatedPressedTile);
+		    }
+		});		
+		
+		
 		//Add tiles to the board
 		mainTable = (TableLayout)findViewById(R.id.mainTable);
 		initializeGame();
@@ -95,15 +125,12 @@ public class GameActivity extends Activity implements OnTouchListener{
 		itemParams.setMargins(3, 3, 3, 3);
 
 		int blankspace = randomInteger.nextInt(numColumns*numRows); //Pick what tile gets the blank spot
-/*		Toast.makeText(getApplicationContext(), "Blank is on tile: " + String.valueOf(blankspace),
-				   Toast.LENGTH_SHORT).show();*/
 		List<Integer> samples = new ArrayList<Integer>(); //setting up array to randomly pick id values from
 		for(int entries=0; entries<(numColumns*numRows); entries++) {
 			samples.add(entries);
 		}
 		Collections.shuffle(samples);
-		System.out.println(samples);
-		System.out.println("Blank is on tile: " + String.valueOf(blankspace));
+		
 		int index = 0;
 		for(int i=0; i<numColumns; i++) {
 			TableRow row = new TableRow(this);
@@ -136,7 +163,7 @@ public class GameActivity extends Activity implements OnTouchListener{
 	}
 
 	private void setTileColor(Tile tile) {
-		//Setting tile colors
+		System.out.println("Swapping color for tile tileId " + String.valueOf(tile.getNumberId()) + " that blank is " + String.valueOf(tile.isBlank()));		
 		//TODO: Fix to not hard code values
 		if (tile.numberId >= 0 && tile.numberId < 4) {
 			tile.setBackground(getResources().getDrawable(R.drawable.tile_style_blue));	
@@ -194,20 +221,25 @@ public class GameActivity extends Activity implements OnTouchListener{
 	private void swapTile(Tile tilePressed) {
 		move_count +=1;
 		move_text.setText(String.valueOf(move_count));
+/*		int index = mainTable.indexOfChild(tilePressed);
+		mainTable.bringChildToFront(mainTable.getChildAt(index));*/
+
 		int newBlankXLocation = tilePressed.getXLocation();
 		int newBlankYLocation = tilePressed.getYLocation();
 
-		tileArray[blankXLocation][blankYLocation].setText(tilePressed.getText());
+		//tileArray[blankXLocation][blankYLocation].setText(tilePressed.getText());
 		tileArray[blankXLocation][blankYLocation].setIsBlank(false);
 		tileArray[blankXLocation][blankYLocation].setNumberId(tilePressed.getNumberId());		
 
 		tileArray[newBlankXLocation][newBlankYLocation].setIsBlank(true);	
+
+		setTileColor(tileArray[blankXLocation][blankYLocation]);
+		setTileColor(tileArray[newBlankXLocation][newBlankYLocation]);
 		
 		blankXLocation = newBlankXLocation;
 		blankYLocation = newBlankYLocation;
-		
-		setTileColor(tileArray[blankXLocation][blankYLocation]);
-		setTileColor(tileArray[newBlankXLocation][newBlankYLocation]);
+		animatedPressedTile = null;
+		checkForWin();
 	}
 
 	@Override
@@ -215,6 +247,10 @@ public class GameActivity extends Activity implements OnTouchListener{
 		Tile tilePressed = (Tile) v;
 		if(tilePressed.isBlank()) {
 			return true;
+		}
+		
+		if(!gamePlayOn) {
+			toggleGameplay(true);
 		}
 
 		switch(event.getAction()) {
@@ -224,7 +260,7 @@ public class GameActivity extends Activity implements OnTouchListener{
 			break;
 		}
 		case MotionEvent.ACTION_UP: {
-			
+			animatedPressedTile = tilePressed;
 			int pressedXLocation = tilePressed.getXLocation();
 			int pressedYLocation = tilePressed.getYLocation();
 
@@ -240,34 +276,30 @@ public class GameActivity extends Activity implements OnTouchListener{
 			if (Math.abs(downXValue - currentX) > Math.abs(downYValue
 					- currentY)) {
 				// going backwards: pushing stuff to the right
-				if (downXValue < currentX) {
-					tilePressed.startAnimation(animationTranslateRight);
+				if (downXValue < currentX) {					
 					if(blankIsToTheRight) 
 					{					
-						swapTile (tilePressed);
+						tilePressed.startAnimation(animationTranslateRight);
 					}
 				}
 				// going forwards: pushing stuff to the left
 				if (downXValue > currentX) {
-					tilePressed.startAnimation(animationTranslateLeft);   	
 					if(blankIsToTheLeft) 
 					{
-						swapTile (tilePressed);
+						tilePressed.startAnimation(animationTranslateLeft);   	
 					}					
 				}
 			} else {
 				if (downYValue < currentY) {
-					tilePressed.startAnimation(animationTranslateDown);
 					if(blankIsBelow) 
 					{
-						swapTile (tilePressed);
+						tilePressed.startAnimation(animationTranslateDown);
 					}
 				}
 				if (downYValue > currentY) {
-					tilePressed.startAnimation(animationTranslateUp);
 					if(blankIsAbove) 
 					{
-						swapTile (tilePressed);
+						tilePressed.startAnimation(animationTranslateUp);
 					}					
 				}
 			}

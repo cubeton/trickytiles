@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_help" >
+
+    <ScrollView
+        android:id="@+id/scroller_id"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:fillViewport="true"
+        android:scrollbars="vertical"
+        tools:ignore="UselessParent" >
+
+        <TextView
+            android:id="@+id/instructions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="19dp"
+            android:text="@string/intructions"
+            android:textColor="@color/help_color"
+            android:textSize="15dp" />
+    </ScrollView>
+
+</RelativeLayout>
