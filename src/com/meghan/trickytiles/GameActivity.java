@@ -1,10 +1,13 @@
 package com.meghan.trickytiles;
 import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
@@ -106,7 +109,6 @@ public class GameActivity extends Activity implements OnTouchListener{
 			TableRow row = new TableRow(this);
 			for(int j=0; j<numRows; j++) {
 				Tile newTile;
-/*				System.out.println("Adding index" + String.valueOf(index));*/
 				if(samples.get(index) == ((numColumns*numRows)-1)) {
 					newTile = new Tile(this.getBaseContext(), i, j, samples.get(index), true);
 					blankXLocation = i;
@@ -114,34 +116,8 @@ public class GameActivity extends Activity implements OnTouchListener{
 				} else {
 					newTile = new Tile(this.getBaseContext(), i, j, samples.get(index), false);
 				}
-
-				//Setting tile colors
-				//TODO: Fix to not hard code values
-/*				System.out.println("Samples" + String.valueOf(samples));
-				System.out.println("Index to look up..." + String.valueOf((index)));
-				System.out.println("Right before coloring..." + String.valueOf(samples.get(index)));*/
-/*				if (index < 7) {
-					newTile.setBackground(getResources().getDrawable(R.drawable.tile_style_blue));	
-					System.out.println("Coloring blue index" + String.valueOf(samples.get(index)));
-				}*/
-				if (samples.get(index) >= 0 && samples.get(index) <= 4) {
-					newTile.setBackground(getResources().getDrawable(R.drawable.tile_style_blue));	
-					System.out.println("Coloring blue index" + String.valueOf(samples.get(index)));
-				}
-				else if (samples.get(index) > 4 && samples.get(index) <= 8) {
-					newTile.setBackground(getResources().getDrawable(R.drawable.tile_style_purple));			
-					System.out.println("Coloring purple index" + String.valueOf(samples.get(index)));
-				} else if (samples.get(index) > 8 && samples.get(index) <= 12) {
-					newTile.setBackground(getResources().getDrawable(R.drawable.tile_style_green));			
-					System.out.println("Coloring green index" + String.valueOf(samples.get(index)));
-				} else if (samples.get(index) > 12 && samples.get(index) <= 14) {
-					newTile.setBackground(getResources().getDrawable(R.drawable.tile_style_orange));			
-					System.out.println("Coloring orange index" + String.valueOf(samples.get(index)));
-				} else if (samples.get(index) == 15) {
-					newTile.setBackground(getResources().getDrawable(R.drawable.tile_style_blank));			
-					System.out.println("Coloring blank index" + String.valueOf(samples.get(index)));					
-				}
 				
+				setTileColor(newTile);
 
 				index++;
 				tileArray[i][j] = newTile;
@@ -157,9 +133,24 @@ public class GameActivity extends Activity implements OnTouchListener{
 
 			mainTable.addView(row); 		
 		}	
-
 	}
 
+	private void setTileColor(Tile tile) {
+		//Setting tile colors
+		//TODO: Fix to not hard code values
+		if (tile.numberId >= 0 && tile.numberId < 4) {
+			tile.setBackground(getResources().getDrawable(R.drawable.tile_style_blue));	
+		} else if (tile.numberId >= 4 && tile.numberId < 8) {
+			tile.setBackground(getResources().getDrawable(R.drawable.tile_style_purple));	
+		} else if (tile.numberId >= 8 && tile.numberId < 12) {
+			tile.setBackground(getResources().getDrawable(R.drawable.tile_style_green));		
+		} else if (tile.numberId >= 12 && tile.numberId <= 14) {
+			tile.setBackground(getResources().getDrawable(R.drawable.tile_style_orange));	
+		} else if (tile.numberId == 15) {
+			tile.setBackground(getResources().getDrawable(R.drawable.tile_style_blank));						
+		}		
+	}
+	
 	private void checkForWin() {
 		int numberId = 0;
 		for(int i=0; i<numColumns; i++) {
@@ -211,10 +202,12 @@ public class GameActivity extends Activity implements OnTouchListener{
 		tileArray[blankXLocation][blankYLocation].setNumberId(tilePressed.getNumberId());		
 
 		tileArray[newBlankXLocation][newBlankYLocation].setIsBlank(true);	
-
+		
 		blankXLocation = newBlankXLocation;
 		blankYLocation = newBlankYLocation;
-
+		
+		setTileColor(tileArray[blankXLocation][blankYLocation]);
+		setTileColor(tileArray[newBlankXLocation][newBlankYLocation]);
 	}
 
 	@Override
@@ -330,6 +323,8 @@ public class GameActivity extends Activity implements OnTouchListener{
 		initializeGame();
 		time_text.setBase(SystemClock.elapsedRealtime());
 		time_text.start();
+		pause.setVisible(true);
+		play.setVisible(false);
 	}
 	
 	private void toggleGameplay(boolean turnOn) {
