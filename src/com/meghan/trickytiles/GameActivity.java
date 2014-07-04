@@ -86,6 +86,7 @@ public class GameActivity extends Activity implements OnTouchListener{
 		gamePlayOn = true;
 		TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
 		TableRow.LayoutParams itemParams = new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);	
+		itemParams.setMargins(3, 3, 3, 3);
 
 		int blankspace = randomInteger.nextInt(14); //Pick what tile gets the blank spot
 
@@ -108,7 +109,6 @@ public class GameActivity extends Activity implements OnTouchListener{
 					newTile = new Tile(this.getBaseContext(), i, j, samples.get(index), false);
 					index++;
 				}
-
 
 				tileArray[i][j] = newTile;
 				newTile.setLayoutParams(itemParams);
