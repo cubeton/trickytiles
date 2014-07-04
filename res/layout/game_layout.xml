@@ -10,38 +10,36 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_centerInParent="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:stretchColumns="*" >
     </TableLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="left"
-        android:orientation="horizontal" >
-
-        <!-- android:textColor="@color/play_color" -->
-
-    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
         android:gravity="right"
         android:orientation="horizontal" >
 
         <!-- android:textColor="@color/play_color" -->
 
         <TextView
-            android:id="@+id/click_text_id"
+            android:id="@+id/move_text_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
+            android:layout_marginTop="5px"
             android:text="@string/move_text"
             android:textSize="18sp" />
-
+        
         <Chronometer
             android:id="@+id/time_id_number"
             android:layout_width="wrap_content"
@@ -49,17 +47,10 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
+            android:layout_marginTop="5px"
             android:text="Chronometer"
             android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/click_text_number_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/click_text_id"
-            android:text="@string/move_number"
-            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/time_id"
@@ -67,9 +58,19 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="31dp"
+            android:layout_marginTop="5px"
             android:layout_toLeftOf="@+id/time_id_number"
             android:text="@string/time"
             android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/move_text_number_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/move_text_id"
+            android:text="@string/move_number"
+            android:textSize="20sp" />
 
     </RelativeLayout>
 

@@ -6,13 +6,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +27,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Chronometer;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -38,16 +39,22 @@ public class GameActivity extends Activity implements OnTouchListener{
 	TableLayout mainTable;
 	int numRows  = 4;
 	int numColumns = 4;
-	int blankXLocation;
+	int blankXLocation = -1;
 	int blankYLocation;
 	float downXValue;
 	float downYValue;
 	public MenuItem play, pause;
+	public boolean gamePlayOn = true;
 	Animation animationTranslateLeft;
 	Animation animationTranslateRight;
 	Animation animationTranslateUp;
 	Animation animationTranslateDown;
-
+	public long timeWhenStopped = 0; //for keeping track of the chronometer pausing and playing
+	public TextView move_text;
+	public Chronometer time_text; 
+	public int move_count = 0;
+	
+	
 	Tile[][] tileArray = new Tile[numRows][numColumns];
 	Random randomInteger = new Random();
 
@@ -55,27 +62,32 @@ public class GameActivity extends Activity implements OnTouchListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game_layout);
+		
+		move_text = (TextView) findViewById(R.id.move_text_number_id);
+		time_text = (Chronometer) findViewById(R.id.time_id_number);
+		time_text.start();	 
+		
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
+		
+		
 		animationTranslateLeft = AnimationUtils.loadAnimation(this, R.anim.anim_translate_left);
 		animationTranslateRight = AnimationUtils.loadAnimation(this, R.anim.anim_translate_right);
 		animationTranslateUp = AnimationUtils.loadAnimation(this, R.anim.anim_translate_up);
 		animationTranslateDown = AnimationUtils.loadAnimation(this, R.anim.anim_translate_down);
 
-
 		//Add tiles to the board
 		mainTable = (TableLayout)findViewById(R.id.mainTable);
 		initializeGame();
 		checkForWin();
-
 	}
 
 	private void initializeGame() {
-
+		gamePlayOn = true;
 		TableLayout.LayoutParams rowParams = new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);
 		TableRow.LayoutParams itemParams = new TableRow.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f);	
 
-		int blankspace = randomInteger.nextInt(15); //Pick what tile gets the blank spot
+		int blankspace = randomInteger.nextInt(14); //Pick what tile gets the blank spot
 
 		List<Integer> samples = new ArrayList<Integer>(); //setting up array to randomly pick id values from
 		for(int entries=0; entries<(numColumns*numRows); entries++) {
@@ -87,12 +99,17 @@ public class GameActivity extends Activity implements OnTouchListener{
 		for(int i=0; i<numColumns; i++) {
 			TableRow row = new TableRow(this);
 			for(int j=0; j<numRows; j++) {
-				Tile newTile = new Tile(this.getBaseContext(), i, j, samples.get(index), blankspace == samples.get(index));
-				if(blankspace == samples.get(index)) {
-					blankXLocation = i;
-					blankYLocation = j;
+				Tile newTile;
+				if(blankXLocation == -1 & (blankspace == samples.get(index))) {
+					newTile = new Tile(this.getBaseContext(), i, j, 15, blankspace == samples.get(index));
+						blankXLocation = i;
+						blankYLocation = j;				
+				} else {
+					newTile = new Tile(this.getBaseContext(), i, j, samples.get(index), false);
+					index++;
 				}
-				index++;
+
+
 				tileArray[i][j] = newTile;
 				newTile.setLayoutParams(itemParams);
 
@@ -112,26 +129,6 @@ public class GameActivity extends Activity implements OnTouchListener{
 			initializeGame();
 		}
 	}
-
-/*	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.game, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}*/
-
 
 	private boolean checkForWin() {
 		int numberId = 0;
@@ -155,8 +152,8 @@ public class GameActivity extends Activity implements OnTouchListener{
 	}
 
 	private void swapTile(Tile tilePressed) {
-		Toast.makeText(getApplicationContext(), "HIT BLANK",
-				Toast.LENGTH_SHORT).show();	
+		move_count +=1;
+		move_text.setText(String.valueOf(move_count));
 		int newBlankXLocation = tilePressed.getXLocation();
 		int newBlankYLocation = tilePressed.getYLocation();
 
@@ -193,8 +190,7 @@ public class GameActivity extends Activity implements OnTouchListener{
 			boolean blankIsToTheRight = (pressedYLocation + 1 == blankYLocation) && (pressedXLocation  == blankXLocation);
 			boolean blankIsToTheLeft = (pressedYLocation  - 1 == blankYLocation) && (pressedXLocation== blankXLocation);
 			boolean blankIsBelow = (pressedYLocation  == blankYLocation) && (pressedXLocation + 1 == blankXLocation);
-			Toast.makeText(getApplicationContext(), "Pressed X Location: " + String.valueOf(pressedXLocation) + "Pressed Y Location:" + String.valueOf(pressedYLocation) + "Blank X Location: " + String.valueOf(blankXLocation) + "Blank Y Location:" + String.valueOf(blankYLocation),
-			Toast.LENGTH_LONG).show();						
+
 			float currentX = event.getX();
 			float currentY = event.getY();
 			// check if horizontal or vertical movement was bigger
@@ -234,7 +230,7 @@ public class GameActivity extends Activity implements OnTouchListener{
 				}
 			}
 			break;
-		}
+			}
 		}
 
 		return true;
@@ -242,10 +238,7 @@ public class GameActivity extends Activity implements OnTouchListener{
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();/*					Toast.makeText(getApplicationContext(), String.valueOf(blankIsToTheRight),
-		Toast.LENGTH_SHORT).show();	*/		
-/*					Toast.makeText(getApplicationContext(), "Moving RIGHT",
-				Toast.LENGTH_SHORT).show();	*/
+		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main_menu, menu);
 		play = menu.findItem(R.id.action_play);
 		pause = menu.findItem(R.id.action_pause);
@@ -263,14 +256,14 @@ public class GameActivity extends Activity implements OnTouchListener{
 		case (R.id.action_refresh) :
 			Toast.makeText(getApplicationContext(), "Game reset",
 					   Toast.LENGTH_SHORT).show();
-			/*resetGame();*/
+			resetGame();
 			break;
 		case(R.id.action_pause) :
-/*			toggleGameplay(false); //Pausing game
-*/			break;
+			toggleGameplay(false); //Pausing game
+			break;
 		case(R.id.action_play) :
-/*			toggleGameplay(true); //Playing game
-*/			break;
+			toggleGameplay(true); //Playing game
+ 			break;
 		case (android.R.id.home) :
 			Intent returnIntent = new Intent();
 			setResult(RESULT_OK, returnIntent);
@@ -281,8 +274,39 @@ public class GameActivity extends Activity implements OnTouchListener{
 	}
 	
 	
+	private void resetGame() {
+		mainTable.removeAllViews();
+		move_count = 0;
+		move_text.setText(String.valueOf(move_count));
+		initializeGame();
+		time_text.setBase(SystemClock.elapsedRealtime());
+		time_text.start();
+	}
 	
+	private void toggleGameplay(boolean turnOn) {
+		if(!turnOn) { //means we're pausing the game
+			pauseChronometer();
+			pause.setVisible(false);
+			play.setVisible(true);			
+			gamePlayOn = false;
+		} else { //means we're turning the game back on
+			resumeChronometer();
+			pause.setVisible(true);
+			play.setVisible(false);			
+			gamePlayOn = true;
+		}
+	}
 
-
+	private void pauseChronometer() {
+		timeWhenStopped = time_text.getBase() - SystemClock.elapsedRealtime();
+		time_text.stop();
+	}
+	
+	private void resumeChronometer() {
+		time_text.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
+		time_text.start();
+		timeWhenStopped = 0;
+	}
+	
 }
 

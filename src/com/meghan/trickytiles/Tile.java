@@ -18,11 +18,11 @@ public class Tile extends Button{
 		this.isBlank = isBlank;
 		if(isBlank) {
 			setText("B");
+			numberId = 16;
 		} else {
 			setText(String.valueOf(numberId));			
 		}
-	}
-	
+	}	
 	
 	public int getXLocation() {
 		return xLocation;
