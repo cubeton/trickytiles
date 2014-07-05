@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<color name="background_color">#ffecb3</color>
-	<color name="help_color">#BBBBBB</color>
-	<color name="title_color">#AAAAAA</color>
-    <color name="menu_color">#FAEF52</color>
-	<color name="menu_glow">#9C9756</color>
+	<color name="help_color_text">#ff7043</color>
+	<color name="title_color">#009688</color>
+    <color name="menu_color">#7b1fa2</color>
 </resources>

@@ -18,9 +18,8 @@ public final class R {
     }
     public static final class color {
         public static final int background_color=0x7f050000;
-        public static final int help_color=0x7f050001;
+        public static final int help_color_text=0x7f050001;
         public static final int menu_color=0x7f050003;
-        public static final int menu_glow=0x7f050004;
         public static final int title_color=0x7f050002;
     }
     public static final class dimen {

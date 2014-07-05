@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-
+	android:background="@color/background_color"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -17,12 +17,13 @@
             android:layout_marginTop="50dp"
             android:layout_marginBottom="100dp"
             android:gravity="center"
-            android:shadowColor="@android:color/white"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="10"
+   			android:shadowColor="#BB004d40"
+    		android:shadowDx="-2"
+    		android:shadowDy="2"
+    		android:shadowRadius="0.01"
             android:text="@string/app_name"
-            android:textColor="@color/title_color" />
+            android:textColor="@color/title_color"
+            android:textSize="@dimen/screen_title_size"  />
         
     </RelativeLayout>
     <RelativeLayout
@@ -34,7 +35,9 @@
             android:id="@+id/ListView_Menu"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" >
-</ListView>
+            android:layout_marginTop="30dp"
+			android:divider="@null"
+			android:dividerHeight="0dp" >
+		</ListView>
     </RelativeLayout>    
 </LinearLayout>

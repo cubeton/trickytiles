@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:background="@color/background_color" >
 
     <ScrollView
         android:id="@+id/scroller_id"
@@ -22,8 +23,8 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="19dp"
             android:text="@string/intructions"
-            android:textColor="@color/help_color"
-            android:textSize="15dp" />
+            android:textColor="@color/help_color_text"
+            android:textSize="40sp" />
     </ScrollView>
 
 </RelativeLayout>
